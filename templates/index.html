@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tweet</title>
+    </head>
+    <body>
+        <table>
+            {% for t in tweets%}
+                <tr>
+                    <td>{{ t.created_at }}</td>
+                    <td>{{ t.text }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </body>
+</html>
