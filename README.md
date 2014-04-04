@@ -9,7 +9,7 @@ Tweet 2 DowJones
 ###setup
 	sudo pip install tweepy -t .
 
-###setup
+###links
 - http://tweet2dowjones.appspot.com/
 - http://tweet2dowjones.appspot.com/test?q=ted
 - http://tweet2dowjones.appspot.com/ndb_stats
