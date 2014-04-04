@@ -109,6 +109,7 @@ class CronFetchTweetHandler(webapp2.RequestHandler):
 
         rst = api.search(q=q,geocode=geocode,since_id=since_id,count=100)
         
+        tws = []
         for t in rst:
             tweet = Tweet(  searchTerm = q,
                             searchGeo = geocode,
@@ -119,7 +120,9 @@ class CronFetchTweetHandler(webapp2.RequestHandler):
                             favorite_count = t.favorite_count,
                             retweet_count = t.retweet_count
                             )
-            tweet.put()
+            #tweet.put()
+            tws.append(tweet)
+        ndb.put_multi(tws)
         return len(rst)
         # template_values = {
         #     'tweets':rst
