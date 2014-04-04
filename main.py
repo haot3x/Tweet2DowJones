@@ -82,8 +82,12 @@ class NDBStatsHandler(webapp2.RequestHandler):
             cnt = Tweet.query(Tweet.searchTerm==q).count()
             stats.append({"q":q,"cnt":cnt})
         stats.append({"q":"TOTAL","cnt":Tweet.query().count()})
+        
+
+
         template_values = {
-             'arr':stats
+             'arr':stats,
+             'dji_cnt':DJI.query().count()
         }
         template = JINJA_ENVIRONMENT.get_template('ndb_stats.html')
         self.response.out.write(template.render(template_values))
@@ -130,20 +134,45 @@ class CronFetchTweetHandler(webapp2.RequestHandler):
         # template = JINJA_ENVIRONMENT.get_template('index.html')
         # self.response.out.write(template.render(template_values))
 
+
 class CronFetchDJIHandler(webapp2.RequestHandler):
     def get(self):
+        from HTMLParser import HTMLParser
+        class DJIHTMLParser(HTMLParser):
+            def __init__(self):
+                HTMLParser.__init__(self)
+                self.found = False
+                self.dji = 0
+            def handle_starttag(self, tag, attrs):
+                for a in attrs:
+                    if a[0] == 'id' and a[1] == 'yfs_l10_^dji':
+                        #print "n %s v %s" % (a[0],a[1])
+                        self.found = True
+            def handle_data(self, data):
+                if self.found is True:
+                    #print "Encountered some data  :", data
+                    self.dji = data
+                    self.found = False
+
         baseurl = "http://finance.yahoo.com/q/bc?s=%5EDJI+Basic+Chart"
         htmlcontent = "".join(urllib.urlopen(baseurl))
-        
-        start_pos = htmlcontent.find("<span id=\"yfs_l10_^dji\">")
-        end_pos = htmlcontent.find("</span></span> <span class=\"down_r time_rtq_content\">")
-        dji_price = float(htmlcontent[start_pos+24:end_pos].replace(',',''))
-        print dji_price
-
+        parser = DJIHTMLParser()
+        parser.feed(htmlcontent)
+        dji_price = float(parser.dji.replace(',',''))        
         dj = DJI(dji = dji_price)
         dj.put()
+        print dji_price
         self.response.out.write(dji_price)
 
+class NDBDeleteHandler(webapp2.RequestHandler):
+    def get(self):
+        q = self.request.get('q')
+        keys = Tweet.query(Tweet.searchTerm==q).fetch(keys_only=True)
+        # toDel = ndb.get_multi(keys)
+        # for d in toDel:
+        #     print d.created_at
+        ndb.delete_multi(keys)
+        self.response.write(len(keys))
 
 def json_date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
@@ -164,6 +193,7 @@ class JsonDumpHandler(webapp2.RequestHandler):
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.response.write('t2d')
+
 
 class TestHandler(webapp2.RequestHandler):
     def get(self):
@@ -191,5 +221,6 @@ app = webapp2.WSGIApplication([
     ('/cron_fetch_tweet',CronFetchTweetHandler),
     ('/cron_fetch_dji',CronFetchDJIHandler),
     ('/ndb_stats',NDBStatsHandler),
+    ('/ndb_delete',NDBDeleteHandler),
     ('/json_dump',JsonDumpHandler)
 ], debug=True)

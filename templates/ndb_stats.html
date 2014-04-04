@@ -12,6 +12,7 @@
             <tr>
                 <th>q</th>
                 <th>cnt</th>
+                <th>DELETE</th>
             </tr>
             </thead>
             <tbody>
@@ -19,10 +20,13 @@
                 <tr>
                     <td>{{ t.q }}</td>
                     <td>{{ t.cnt }}</td>
+                    <td><a class="btn btn-warning btn-mini" href="/ndb_delete?q={{t.q}}" role="button">DELETE</a></td>
                 </tr>
             {% endfor %}
         </tbody>
         </table>
+
+        <strong><h4> dji count = {{dji_cnt}} </h4></strong>
 
         </div>
 
