@@ -17,5 +17,8 @@ Tweet 2 DowJones
 - https://dev.twitter.com/docs/streaming-apis/
 - http://pythonhosted.org/tweepy/html/api.html?highlight=result 
 
+###cron job
+	cron.yaml
+	now - every one hour
 
 
