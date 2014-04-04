@@ -10,21 +10,15 @@
             
             <thead>
             <tr>
-                <th>created_at</th>
-                <th>text</th>
-                <th>geo</th>
-                <th>place</th>
-                <th>coordinates</th>
+                <th>q</th>
+                <th>cnt</th>
             </tr>
             </thead>
             <tbody>
-            {% for t in tweets%}
+            {% for t in arr%}
                 <tr>
-                    <td>{{ t.created_at }}</td>
-                    <td>{{ t.text }}</td>
-                    <td>{{ t.geo }}</td>
-                    <td>{{ t.place }}</td>
-                    <td>{{ t.id_str }}</td>
+                    <td>{{ t.q }}</td>
+                    <td>{{ t.cnt }}</td>
                 </tr>
             {% endfor %}
         </tbody>

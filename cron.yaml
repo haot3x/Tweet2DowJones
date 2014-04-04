@@ -1,0 +1,4 @@
+cron:
+- description: get tweets and put into NDB for all GEO and Keywords combination
+  url: /cron_fetch_tweet
+  schedule: every 15 minutes
