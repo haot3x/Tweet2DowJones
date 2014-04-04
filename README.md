@@ -9,10 +9,12 @@ Tweet 2 DowJones
 ###setup
 	sudo pip install tweepy -t .
 
-
+###setup
+- http://tweet2dowjones.appspot.com/
+- http://tweet2dowjones.appspot.com/test?q=ted
+- http://tweet2dowjones.appspot.com/ndb_stats
 
 ###dependency
-- http://tweet2dowjones.appspot.com/
 - https://github.com/tweepy/tweepy
 - https://dev.twitter.com/docs/streaming-apis/
 - http://pythonhosted.org/tweepy/html/api.html?highlight=result 
