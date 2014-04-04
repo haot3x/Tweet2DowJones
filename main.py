@@ -25,11 +25,6 @@ import jinja2
 import webapp2
 import logging
 
-# Twitter stuff
-#from TwitterAPI import TwitterAPI,TwitterOAuth
-
-
-# gae setup
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates"))
 )
@@ -41,6 +36,10 @@ GEO_DICT = [
             ["ATL","33.759293,-84.387817,100mi"]
             ]
 Q_TERMS = ["i feel","i am feeling","i'm feeling","i dont feel","i'm","Im","I am","makes me"]
+
+
+
+
 
 class Tweet(ndb.Model):
     searchTerm = ndb.StringProperty()
@@ -55,17 +54,26 @@ class Tweet(ndb.Model):
     geo = ndb.StringProperty()
     favorite_count = ndb.IntegerProperty()
     retweet_count = ndb.IntegerProperty()
-    
+
+class DJI(ndb.Model):
+    dji = ndb.FloatProperty()    
+    timestamp = ndb.DateTimeProperty(auto_now_add=True)
+
+
 import tweepy
 CONSUMER_KEY = '63c0lXM51rxZ2cZUr3QcKKR9q'
 CONSUMER_SECRET = 'Kxu44kTkweAkfAVtYVTe2y2Q8FdtkkKFPaMacyihRs1d9eRuU4'
 ACCESS_TOKEN_KEY = '37201527-wnO8ILKImZ4SDzTNF3RNTQ9UMZV4oYeBF0t5lA2yU'
 ACCESS_TOKEN_SECRET = 'QHkYL3Vk0E1sj4WPPe2EKb1KbEke0SuW3K0Y6Ag4N4GeS'
 
-
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN_KEY, ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth)
+
+
+
+
+##########################################################################
 
 class NDBStatsHandler(webapp2.RequestHandler):
     def get(self):
@@ -99,7 +107,7 @@ class CronFetchTweetHandler(webapp2.RequestHandler):
 
         logging.info('__get_tweet: q=%s,geocode=%s,since_id=%d' % (q,geocode,since_id))
 
-        rst = api.search(q=q,geocode=geocode,since_id=since_id)
+        rst = api.search(q=q,geocode=geocode,since_id=since_id,count=100)
         
         for t in rst:
             tweet = Tweet(  searchTerm = q,
@@ -119,15 +127,45 @@ class CronFetchTweetHandler(webapp2.RequestHandler):
         # template = JINJA_ENVIRONMENT.get_template('index.html')
         # self.response.out.write(template.render(template_values))
 
+class CronFetchDJIHandler(webapp2.RequestHandler):
+    def get(self):
+        baseurl = "http://finance.yahoo.com/q/bc?s=%5EDJI+Basic+Chart"
+        htmlcontent = "".join(urllib.urlopen(baseurl))
+        
+        start_pos = htmlcontent.find("<span id=\"yfs_l10_^dji\">")
+        end_pos = htmlcontent.find("</span></span> <span class=\"down_r time_rtq_content\">")
+        dji_price = float(htmlcontent[start_pos+24:end_pos].replace(',',''))
+        print dji_price
+
+        dj = DJI(dji = dji_price)
+        dj.put()
+        self.response.out.write(dji_price)
+
+
+def json_date_handler(obj):
+    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+
+class JsonDumpHandler(webapp2.RequestHandler):
+    
+    def get(self):
+        import json
+        q = self.request.get('q')
+        if q is '':
+            jd = json.dumps([t.to_dict() for t in Tweet.query().fetch()],default=json_date_handler)
+            print "all"
+        else:
+            jd = json.dumps([t.to_dict() for t in Tweet.query(Tweet.searchTerm == q).fetch()],default=json_date_handler)
+            print q
+        self.response.out.write(jd)
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world!')
+        self.response.write('t2d')
 
 class TestHandler(webapp2.RequestHandler):
     def get(self):
         q = self.request.get('q')
-        if q is None:
+        if q is None or q is '':
             q = 'yale'
         geocode = '37.781157,-122.398720,100mi'
 
@@ -136,7 +174,7 @@ class TestHandler(webapp2.RequestHandler):
         else:
             since_id = 0
 
-        rst = api.search(q=q,geocode=geocode,since_id=since_id)
+        rst = api.search(q=q,geocode=geocode,since_id=since_id,count=100)
 
         template_values = {
             'tweets':rst
@@ -148,5 +186,7 @@ app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/test',TestHandler),
     ('/cron_fetch_tweet',CronFetchTweetHandler),
-    ('/ndb_stats',NDBStatsHandler)
+    ('/cron_fetch_dji',CronFetchDJIHandler),
+    ('/ndb_stats',NDBStatsHandler),
+    ('/json_dump',JsonDumpHandler)
 ], debug=True)

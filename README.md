@@ -6,21 +6,27 @@ Tweet 2 DowJones
 	Author: Haotian
 	Last Update: 3 Apr 2014
 
-###setup
+##setup
 	sudo pip install tweepy -t .
 
-###links
-- http://tweet2dowjones.appspot.com/
-- http://tweet2dowjones.appspot.com/test?q=ted
-- http://tweet2dowjones.appspot.com/ndb_stats
-
-###dependency
+##dependency
 - https://github.com/tweepy/tweepy
 - https://dev.twitter.com/docs/streaming-apis/
 - http://pythonhosted.org/tweepy/html/api.html?highlight=result 
 
-###cron job
-	cron.yaml
-	now - every one hour
+
+
+##links
+- http://tweet2dowjones.appspot.com/
+- http://tweet2dowjones.appspot.com/test?q=ted
+- http://tweet2dowjones.appspot.com/ndb_stats
+- http://tweet2dowjones.appspot.com/json_dump?q=searchterm
+- http://tweet2dowjones.appspot.com/json_dump
+
+##cron job
+- http://tweet2dowjones.appspot.com/cron_fetch_tweet
+- http://tweet2dowjones.appspot.com/cron_fetch_dji
+	
+	
 
 
