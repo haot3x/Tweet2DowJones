@@ -23,7 +23,7 @@ Tweet 2 DowJones
 - http://tweet2dowjones.appspot.com/json_dump?q=searchterm
 - http://tweet2dowjones.appspot.com/json_dump
 - http://tweet2dowjones.appspot.com/ndb_delete?q=searchterm
-- tweet2dowjones.appspot.com/iCAPITAL_am_sure_to_delete_all_ndb
+- tweet2dowjones.appspot.com/I_am_sure_to_delete_all_ndb
 
 ##cron job
 - http://tweet2dowjones.appspot.com/cron_fetch_tweet
