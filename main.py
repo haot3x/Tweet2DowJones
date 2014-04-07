@@ -174,6 +174,29 @@ class NDBDeleteHandler(webapp2.RequestHandler):
         ndb.delete_multi(keys)
         self.response.write(len(keys))
 
+class NDBDeleteAllHandler(webapp2.RequestHandler):
+    def get(self):
+
+        cnt1 = Tweet.query().count()
+        cnt2 = DJI.query().count()
+        
+        errorMsg = ""
+
+        while Tweet.query().count()>0 or DJI.query().count()>0: 
+            try:
+                while Tweet.query().count() > 0:
+                    keys = Tweet.query().fetch(2000,keys_only=True)
+                    ndb.delete_multi(keys)
+                
+                while DJI.query().count() > 0:
+                    keys = DJI.query().fetch(2000,keys_only=True)
+                    ndb.delete_multi(keys)
+            except Exception, e: #DeadlineExceededErrors
+                errorMsg = errorMsg + str(e)
+
+        msg = "deleted: %d Tweet objects, %d DJI objects." % (cnt1,cnt2)
+        self.response.write(msg + "</br></br></br>" + errorMsg)
+
 def json_date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
@@ -222,5 +245,6 @@ app = webapp2.WSGIApplication([
     ('/cron_fetch_dji',CronFetchDJIHandler),
     ('/ndb_stats',NDBStatsHandler),
     ('/ndb_delete',NDBDeleteHandler),
-    ('/json_dump',JsonDumpHandler)
+    ('/json_dump',JsonDumpHandler),
+    ('/I_am_sure_to_delete_all_ndb',NDBDeleteAllHandler)
 ], debug=True)

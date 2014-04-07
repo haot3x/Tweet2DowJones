@@ -1,8 +1,10 @@
 cron:
 - description: get tweets and put into NDB for all GEO and Keywords combination
   url: /cron_fetch_tweet
-  schedule: every 30 minutes
+  schedule: every 20 minutes from 7:00 to 19:00
+  timezone: US/Eastern
 
 - description: get price and put into DJI
   url: /cron_fetch_dji
-  schedule: every 20 minutes
+  schedule: every 5 minutes from 7:00 to 19:00
+  timezone: US/Eastern
