@@ -29,14 +29,14 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates"))
 )
 
-GEO_DICT = [
+GEO_LIST = [
             ["LA","34.002854,-118.110295,100mi"],
             ["NYC","40.767024,-73.973884,100mi"],
             ["CHI","41.849591,-87.690270,100mi"],
             ["ATL","33.759293,-84.387817,100mi"]
             ]
 Q_TERMS = ["i feel","i am feeling","i'm feeling","i dont feel","i'm","Im","I am","makes me"]
-
+GEO_DICT = dict(zip(map(lambda x: x[0], GEO_LIST),map(lambda x: x[1], GEO_LIST)))
 
 
 
@@ -104,7 +104,7 @@ class CronDummyHandler(webapp2.RequestHandler):
 class CronFetchTweetHandler(webapp2.RequestHandler):
     def get(self):
         cnt = 0
-        for city in GEO_DICT:
+        for city in GEO_LIST:
             for q in Q_TERMS:
                 cnt += self.__get_tweet(q=q,geocode=city[1])
         logging.info('CRON cron_fetch_tweet DONE - %d tweets'%(cnt,))
@@ -207,20 +207,6 @@ class DJIJsonHandler(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(jd)
 
-class DataDJIHandler(webapp2.RequestHandler):
-    def get(self):
-        import json
-        dicts = [o.to_dict() for o in DJI.query().order(DJI.timestamp).fetch()]
-        dots = [{'x':d['dji'],'y':d['timestamp']} for d in dicts]
-        data = [{
-            "color": "blue",
-            "name": "Dow Jones",
-            "data": dots
-            }]
-
-        jd = json.dumps(data,default=json_date_handler)
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(jd)        
 
 class TweetJsonDumpHandler(webapp2.RequestHandler):
     
@@ -240,20 +226,53 @@ class TweetJsonDumpHandler(webapp2.RequestHandler):
 class TweetJsonDownloadHandler(webapp2.RequestHandler):
     def get(self):
         import json
+
         try:
             page = int(self.request.get('page'))
             size = int(self.request.get('size'))
-            if page <= 0  or size <= 0:
-                self.response.out.write("page and size must be positive integer")    
-                return
+            kwidx = str(self.request.get('kwidx'))
+            city = str(self.request.get('city'))
+
+            dl = int(self.request.get('dl'))
+
+            if not kwidx == 'all':
+                kwidx = int(kwidx)
+                if kwidx < 0 or kwidx > (len(Q_TERMS)-1):
+                    raise Exception("kwidx")
+
+            if not city == 'all':
+                if not city in [o[0] for o in GEO_LIST]:
+                    raise Exception("city") 
+
+            if not dl in [0,1]:
+                raise Exception("dl")                 
+                        
         except Exception, e:
-            self.response.out.write("Please supply valid page and size para")
+            self.response.out.write("Please supply valid [page] [size] [kwidx] [city] [dl] para <br>\
+                                    [page] start from <i>1</i> <br>\
+                                    [size] page size, positive int, suggest <i>10000</i> <br>\
+                                    [kwidx] start from 0 to %d in %s or use <i>all</i><br>\
+                                    [city] in  %s or use <i>all</i> <br>\
+                                    [dl] 0 or 1 whether to download\
+                                    " % (len(Q_TERMS)-1,str(Q_TERMS),str([o[0] for o in GEO_LIST])))
             return
-        tws = Tweet.query().fetch(size,offset=(page-1)*size)
+
+
+        if kwidx == 'all' and city == 'all':
+            tws = Tweet.query().fetch(size,offset=(page-1)*size)
+        elif kwidx == 'all':
+            tws = Tweet.query(Tweet.searchGeo == GEO_DICT[city]).order(Tweet.timestamp).fetch(size,offset=(page-1)*size)
+        elif city == 'all':
+            tws = Tweet.query(Tweet.searchTerm == Q_TERMS[kwidx]).order(Tweet.timestamp).fetch(size,offset=(page-1)*size)
+        else:
+            tws = Tweet.query(Tweet.searchGeo == GEO_DICT[city],Tweet.searchTerm == Q_TERMS[kwidx]).order(Tweet.timestamp).fetch(size,offset=(page-1)*size)
+
         jd = json.dumps([t.to_dict() for t in tws],default=json_date_handler)
-          
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.headers['Content-Disposition'] = "attachment;filename=Tweet.size%dpage%dcnt%d.json" % (size,page,len(tws))
+        
+        if dl == 1:
+            self.response.headers['Content-Disposition'] = "attachment;filename=Tweet.size-%d.page-%d.kwidx-%s.city-%s.cnt%d.json" % (size,page,str(kwidx),city,len(tws))
+        
         self.response.out.write(jd)
 
 class MainHandler(webapp2.RequestHandler):
@@ -299,9 +318,11 @@ app = webapp2.WSGIApplication([
     ('/cron_dummy',CronDummyHandler),
     ('/ndb_stats',NDBStatsHandler),
     ('/ndb_delete',NDBDeleteHandler),
-    ('/json_dump',TweetJsonDumpHandler),
-    ('/json_dump_download',TweetJsonDownloadHandler),
-    ('/dji_dump',DJIJsonHandler),
-    ('/data/dji',DataDJIHandler)
+    
+    ('/json_tws_tmp',TweetJsonDumpHandler),
+    
+
+    ('/json_tws',TweetJsonDownloadHandler),
+    ('/json_dji',DJIJsonHandler)
  
 ], debug=True)
