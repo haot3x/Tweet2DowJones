@@ -37,7 +37,8 @@ where for **json_tws**
     [city] in ['LA', 'NYC', 'CHI', 'ATL'] or use all 
     [dl] 0 or 1 whether to download
 
-`kwidx` and `city` are used together i.e **AND** logic
+**at least one of `kwi]dx` or `city` must be `all`**
+
 
 ##design
     <script src="/json/json_data.js"></script>

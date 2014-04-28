@@ -245,10 +245,15 @@ class TweetJsonDownloadHandler(webapp2.RequestHandler):
                     raise Exception("city") 
 
             if not dl in [0,1]:
-                raise Exception("dl")                 
-                        
+                raise Exception("dl")
+
+            if not kwidx == 'all' and not city == 'all':
+                raise Exception('index')
+
         except Exception, e:
-            self.response.out.write("Please supply valid [page] [size] [kwidx] [city] [dl] para <br>\
+            self.response.out.write("<h3>Please supply valid [page] [size] [kwidx] [city] [dl] para</h3>\
+                                    <strong>at least one of [kwidx] [city] must be all</strong> \
+                                    </br></br>\
                                     [page] start from <i>1</i> <br>\
                                     [size] page size, positive int, suggest <i>10000</i> <br>\
                                     [kwidx] start from 0 to %d in %s or use <i>all</i><br>\
@@ -264,8 +269,7 @@ class TweetJsonDownloadHandler(webapp2.RequestHandler):
             tws = Tweet.query(Tweet.searchGeo == GEO_DICT[city]).order(Tweet.timestamp).fetch(size,offset=(page-1)*size)
         elif city == 'all':
             tws = Tweet.query(Tweet.searchTerm == Q_TERMS[kwidx]).order(Tweet.timestamp).fetch(size,offset=(page-1)*size)
-        else:
-            tws = Tweet.query(Tweet.searchGeo == GEO_DICT[city],Tweet.searchTerm == Q_TERMS[kwidx]).order(Tweet.timestamp).fetch(size,offset=(page-1)*size)
+            
 
         jd = json.dumps([t.to_dict() for t in tws],default=json_date_handler)
         self.response.headers['Content-Type'] = 'application/json'

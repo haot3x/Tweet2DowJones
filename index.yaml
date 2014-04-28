@@ -12,6 +12,11 @@ indexes:
 
 - kind: Tweet
   properties:
+  - name: searchGeo
+  - name: timestamp
+
+- kind: Tweet
+  properties:
   - name: searchTerm
   - name: id
     direction: desc
