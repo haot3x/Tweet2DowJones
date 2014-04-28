@@ -74,6 +74,11 @@ api = tweepy.API(auth)
 
 
 ##########################################################################
+def json_date_handler(obj):
+#    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+    import datetime
+    return obj.strftime("%Y-%m-%d %H:%M:%S") if isinstance(obj,datetime.datetime) else obj
+
 
 class NDBStatsHandler(webapp2.RequestHandler):
     def get(self):
@@ -92,6 +97,9 @@ class NDBStatsHandler(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('ndb_stats.html')
         self.response.out.write(template.render(template_values))
 
+class CronDummyHandler(webapp2.RequestHandler):
+    def get(self):
+        pass
 
 class CronFetchTweetHandler(webapp2.RequestHandler):
     def get(self):
@@ -128,12 +136,7 @@ class CronFetchTweetHandler(webapp2.RequestHandler):
             tws.append(tweet)
         ndb.put_multi(tws)
         return len(rst)
-        # template_values = {
-        #     'tweets':rst
-        # }
-        # template = JINJA_ENVIRONMENT.get_template('index.html')
-        # self.response.out.write(template.render(template_values))
-
+        
 
 class CronFetchDJIHandler(webapp2.RequestHandler):
     def get(self):
@@ -197,10 +200,29 @@ class NDBDeleteAllHandler(webapp2.RequestHandler):
         msg = "deleted: %d Tweet objects, %d DJI objects." % (cnt1,cnt2)
         self.response.write(msg + "</br></br></br>" + errorMsg)
 
-def json_date_handler(obj):
-    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+class DJIJsonHandler(webapp2.RequestHandler):    
+    def get(self):
+        import json
+        jd = json.dumps([t.to_dict() for t in DJI.query().order(DJI.timestamp).fetch()],default=json_date_handler)
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(jd)
 
-class JsonDumpHandler(webapp2.RequestHandler):
+class DataDJIHandler(webapp2.RequestHandler):
+    def get(self):
+        import json
+        dicts = [o.to_dict() for o in DJI.query().order(DJI.timestamp).fetch()]
+        dots = [{'x':d['dji'],'y':d['timestamp']} for d in dicts]
+        data = [{
+            "color": "blue",
+            "name": "Dow Jones",
+            "data": dots
+            }]
+
+        jd = json.dumps(data,default=json_date_handler)
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(jd)        
+
+class TweetJsonDumpHandler(webapp2.RequestHandler):
     
     def get(self):
         import json
@@ -211,11 +233,41 @@ class JsonDumpHandler(webapp2.RequestHandler):
         else:
             jd = json.dumps([t.to_dict() for t in Tweet.query(Tweet.searchTerm == q).fetch()],default=json_date_handler)
             print q
+        
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(jd)
+
+class TweetJsonDownloadHandler(webapp2.RequestHandler):
+    def get(self):
+        import json
+        try:
+            page = int(self.request.get('page'))
+            size = int(self.request.get('size'))
+            if page <= 0  or size <= 0:
+                self.response.out.write("page and size must be positive integer")    
+                return
+        except Exception, e:
+            self.response.out.write("Please supply valid page and size para")
+            return
+        tws = Tweet.query().fetch(size,offset=(page-1)*size)
+        jd = json.dumps([t.to_dict() for t in tws],default=json_date_handler)
+          
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.headers['Content-Disposition'] = "attachment;filename=Tweet.size%dpage%dcnt%d.json" % (size,page,len(tws))
         self.response.out.write(jd)
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('t2d')
+        
+
+        dicts = [o.to_dict() for o in DJI.query().order(DJI.timestamp).fetch()]
+        dots = [{'x':d['dji'],'y':str(d['timestamp'])} for d in dicts]
+        
+        template_values = {
+            'dji':dots
+        }
+        template = JINJA_ENVIRONMENT.get_template('index.html')
+        self.response.out.write(template.render(template_values))
 
 
 class TestHandler(webapp2.RequestHandler):
@@ -235,16 +287,21 @@ class TestHandler(webapp2.RequestHandler):
         template_values = {
             'tweets':rst
         }
-        template = JINJA_ENVIRONMENT.get_template('index.html')
+        template = JINJA_ENVIRONMENT.get_template('test.html')
         self.response.out.write(template.render(template_values))
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
+    # ('/I_am_sure_to_delete_all_ndb',NDBDeleteAllHandler),
     ('/test',TestHandler),
     ('/cron_fetch_tweet',CronFetchTweetHandler),
     ('/cron_fetch_dji',CronFetchDJIHandler),
+    ('/cron_dummy',CronDummyHandler),
     ('/ndb_stats',NDBStatsHandler),
     ('/ndb_delete',NDBDeleteHandler),
-    ('/json_dump',JsonDumpHandler),
-    ('/I_am_sure_to_delete_all_ndb',NDBDeleteAllHandler)
+    ('/json_dump',TweetJsonDumpHandler),
+    ('/json_dump_download',TweetJsonDownloadHandler),
+    ('/dji_dump',DJIJsonHandler),
+    ('/data/dji',DataDJIHandler)
+ 
 ], debug=True)

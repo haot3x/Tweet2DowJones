@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tweet</title>
+    </head>
+    <body>
+        <div class='container'>
+        
+        <table class="table table-striped table-hover">
+            
+            <thead>
+            <tr>
+                <th>created_at</th>
+                <th>text</th>
+                <th>geo</th>
+                <th>place</th>
+                <th>coordinates</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for t in tweets%}
+                <tr>
+                    <td>{{ t.created_at }}</td>
+                    <td>{{ t.text }}</td>
+                    <td>{{ t.geo }}</td>
+                    <td>{{ t.place }}</td>
+                    <td>{{ t.id_str }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+        </div>
+
+    </body>
+
+    <script src="/libs/jquery-1.11.0.js"></script>
+    <script src="/libs/bootstrap-3.1.1/js/bootstrap.js"></script>
+    <link href="/libs/bootstrap-3.1.1/css/bootstrap.css" rel="stylesheet"> 
+        
+</html>
