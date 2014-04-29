@@ -61,9 +61,6 @@ def generate_dji():
 			#write dji data
 			result.append([elem['timestamp'].strftime("%Y-%m-%d %H:%M:%S"), elem['value']])
 
-
-
-
 	di = {'name': 'DJI', 'series': result}
 
 	#f = open(DJI_OUTPUT, 'w+')
@@ -96,8 +93,7 @@ def generate_emotion():
 	for emotion_input in EMOTION_INPUTS:
 		objs = json.load(open(emotion_input, 'r'))
 
-		
-
+		result = []
 		for o in objs:
 			created_time = convert_datetime(o['created_at'])
 			emotion = o['classification']
@@ -105,9 +101,22 @@ def generate_emotion():
 			insert_to_emotiondict(created_time, emotion)
 			#raw_input()
 
+		# for elem in emotiondict:
+		# 	print elem
 		for elem in emotiondict:
-			print elem
+			result.append([elem['timestamp'].strftime("%Y-%m-%d %H:%M:%S"), float(elem['pos'])/float(elem['pos']+elem['neg']+1)])
 
+		name = emotion_input[18:len(emotion_input)-5]
+		outfile = emotion_input[:len(emotion_input)-5]+'_parsed.json'
+		print name
+		print outfile
+
+		di = {'name': name, 'series': result}
+
+
+		f = open(outfile, 'w+')
+		f.write(json.dumps(di, default=date_handler))
+		f.close()
 
 
 def test():
