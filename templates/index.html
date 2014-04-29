@@ -48,12 +48,17 @@
 
 $.jqplot('chartdiv',
     [
+        DATA_DJI['series'],
         DATA_LA['series'],
         DATA_NYC['series']
     ],
     {
         title:'BY GEO DUMMY - CAN ZOOM IN',
-        seriesColors: ["rgba(78, 135, 194, 0.7)", "rgb(211, 240, 9)"],
+        seriesColors: [
+            "rgba(78, 135, 194, 0.7)", 
+            "rgb(211, 240, 9)",
+            "rgb(180, 50, 109)"
+            ],
         seriesDefaults: {
             rendererOptions: {
                 smooth: true,
@@ -66,7 +71,10 @@ $.jqplot('chartdiv',
         series: [
             {
                 fill: true,
-                label: DATA_LA['name']
+                label: DATA_DJI['name']
+            },
+            {
+                label: DATA_NYC['name']
             },
             {
                 label: DATA_NYC['name']
