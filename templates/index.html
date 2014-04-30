@@ -51,10 +51,19 @@
             
             <li class="active"><a href="#idea-div">Idea</a></li>
             <li><a href="#input-stats-div">Input Stats</a></li>
+            
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Result <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+
+            <li><a href="#chart-all-div">All</a></li>
             <li><a href="#chart-geo-div">By Geo</a></li>
             <li><a href="#chart-kw-div">By Keywords</a></li>
             <li><a href="#conclusion-div">Conclusion</a></li>
             
+              </ul>
+            </li>
+
           </ul>
 
 
@@ -122,8 +131,16 @@ Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit no
 
         </div>
 
+
         <div class='row'>
-        <div class="col-md-12" height='900px'>
+        <div class="col-md-12" >
+                <div id="chart-all-div" ></div>
+        </div>
+        </div>
+
+
+        <div class='row'>
+        <div class="col-md-12" >
                 <div id="chart-geo-div" ></div>
         </div>
         </div>
@@ -341,7 +358,79 @@ $.jqplot('chart-input-dji',
     }
 );
 
-var chartGeo = $.jqplot('chart-geo-div',
+
+$.jqplot('chart-all-div',
+    [
+        DATA_DJI_PERC['series'],
+        DATA_all_15['series']
+    ],
+    {
+        title:'All Tweets',
+        height:500,
+        seriesColors: [
+            "rgba(78, 135, 194, 0.7)", 
+            "rgb(211, 240, 9)"
+            ],
+        seriesDefaults: {
+            rendererOptions: {
+                smooth: true,
+                animation: {
+                    show: false
+                }
+            },
+            showMarker: false
+        },
+        series: [
+            {
+                fill: true,
+                label: DATA_DJI_PERC['name']
+            },
+            {
+                label: DATA_all_15['name']
+            }
+        ],
+
+        grid: {
+            background: 'rgba(200,200,200,0.0)',
+            drawBorder: false,
+            shadow: false,
+            gridLineColor: '#666666',
+            gridLineWidth: 1
+        },
+        highlighter: {
+            show: true,
+            sizeAdjust: 1,
+            tooltipOffset: 9
+        },
+
+        axes:{
+            xaxis:{ 
+                renderer:$.jqplot.DateAxisRenderer,
+                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                tickOptions: {
+                    formatString:'%Y-%m-%d %H:%M:%S',
+                    angle: -45
+                } 
+            }, 
+            yaxis:{
+                tickOptions:{ prefix:''} 
+            } 
+        },
+        legend: {
+            show: true,
+            placement: 'inside',
+            renderer: $.jqplot.EnhancedLegendRenderer,
+            show:true,
+            showSwatches: true
+        },
+        cursor:{
+            show: true,
+            zoom: true
+        } 
+    }
+);
+
+$.jqplot('chart-geo-div',
     [
         DATA_DJI['series'],
         DATA_LA['series'],
@@ -420,7 +509,7 @@ var chartGeo = $.jqplot('chart-geo-div',
 
 
 
-var chartKw = $.jqplot('chart-kw-div',
+$.jqplot('chart-kw-div',
     [
         DATA_DJI_PERC['series'],
         DATA_i_mfeeling_15['series'],
