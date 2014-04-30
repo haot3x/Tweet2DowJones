@@ -24,6 +24,7 @@ from google.appengine.ext import ndb
 import jinja2
 import webapp2
 import logging
+import json
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates"))
@@ -79,6 +80,14 @@ def json_date_handler(obj):
     import datetime
     return obj.strftime("%Y-%m-%d %H:%M:%S") if isinstance(obj,datetime.datetime) else obj
 
+
+class NDBStatsGeoHandler(webapp2.RequestHandler):
+    def get(self):
+        stats = []
+        for q in GEO_LIST: 
+            cnt = Tweet.query(Tweet.searchGeo==q[1]).count()
+            stats.append({"q":q[0],"cnt":cnt})
+        self.response.out.write(json.dumps(stats,default=json_date_handler))
 
 class NDBStatsHandler(webapp2.RequestHandler):
     def get(self):
@@ -225,8 +234,6 @@ class TweetJsonDumpHandler(webapp2.RequestHandler):
 
 class TweetJsonDownloadHandler(webapp2.RequestHandler):
     def get(self):
-        import json
-
         try:
             page = int(self.request.get('page'))
             size = int(self.request.get('size'))
@@ -325,6 +332,7 @@ app = webapp2.WSGIApplication([
     
     ('/json_tws_tmp',TweetJsonDumpHandler),
     
+    ('/ndb_stats_geo',NDBStatsGeoHandler),
 
     ('/json_tws',TweetJsonDownloadHandler),
     ('/json_dji',DJIJsonHandler)
