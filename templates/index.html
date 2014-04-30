@@ -405,7 +405,10 @@ var chartGeo = $.jqplot('chart-geo-div',
         },
         legend: {
             show: true,
-            placement: 'inside'
+            placement: 'inside',
+            renderer: $.jqplot.EnhancedLegendRenderer,
+            show:true,
+            showSwatches: true
         },
         cursor:{
             show: true,
@@ -419,6 +422,7 @@ var chartGeo = $.jqplot('chart-geo-div',
 
 var chartKw = $.jqplot('chart-kw-div',
     [
+        DATA_DJI_PERC['series'],
         DATA_i_mfeeling_15['series'],
         DATA_i_m_15['series'],
         DATA_i_am_feeling_15['series'],
@@ -445,10 +449,10 @@ var chartKw = $.jqplot('chart-kw-div',
             showMarker: false
         },
         series: [
-            // {
-            //     fill: true,
-            //     label: DATA_DJI['name']
-            // },
+            {
+                fill: true,
+                label: DATA_DJI_PERC['name']
+            },
             {
                 label: DATA_i_mfeeling_15['name']
             },
