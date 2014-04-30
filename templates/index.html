@@ -92,7 +92,7 @@
         <div class='row' id="idea-div">
         <div class="col-md-12">
         <div class="jumbotron">
-<h1>Idea</h1>      
+<h2>Idea</h2>      
 <p>
 Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
 </p>
@@ -132,23 +132,26 @@ Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit no
         </div>
 
 
-        <div class='row'>
+        <div class='row' id="chart-all-div">
         <div class="col-md-12" >
-                <div id="chart-all-div" ></div>
+            <h2>Result for all the tweets</h2>
+            <div id="chart-all" ></div>
         </div>
         </div>
 
 
-        <div class='row'>
+        <div class='row' id="chart-geo-div">
         <div class="col-md-12" >
-                <div id="chart-geo-div" ></div>
+            <h2>Result breakdown by geo location</h2>
+            <div id="chart-geo" ></div>
         </div>
         </div>
 
 
-        <div class='row'>
+        <div class='row' id="chart-kw-div">
         <div class="col-md-12">
-                <div id="chart-kw-div"></div>
+            <h2>Result breakdown by search keyword</h2>
+            <div id="chart-kw"></div>
         </div>
         </div>
 
@@ -163,7 +166,7 @@ Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit no
         <div class='row' id="conclusion-div">
         <div class="col-md-12">
         <div class="jumbotron">
-<h1>Conclusion</h1>      
+<h2>Conclusion</h2>      
 <p>
 Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
 </p>
@@ -225,14 +228,14 @@ Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit no
     
     <script>
         $(document).ready(function() {   
-            console.log(DATA_LA['name']);
-            console.log(DATA_LA['series'].length);
-            console.log(DATA_LA['series'][0]);
 
 $('.navbar-left li').click(function(){
-    
+        
+    if($(this).hasClass('dropdown'))
+        return;
+
     var anchor = $(this).children().first().attr('href');
-    console.log(anchor);
+    // console.log(anchor);
     $('html, body').animate({ scrollTop: $(anchor).offset().top -50}, 500);   
 
     $('.navbar-left li').each(function(i,dom){
@@ -359,7 +362,7 @@ $.jqplot('chart-input-dji',
 );
 
 
-$.jqplot('chart-all-div',
+$.jqplot('chart-all',
     [
         DATA_DJI_PERC['series'],
         DATA_all_15['series']
@@ -430,7 +433,7 @@ $.jqplot('chart-all-div',
     }
 );
 
-$.jqplot('chart-geo-div',
+$.jqplot('chart-geo',
     [
         DATA_DJI_PERC['series'],
         DATA_ATL_15['series'],
@@ -517,7 +520,7 @@ $.jqplot('chart-geo-div',
 
 
 
-$.jqplot('chart-kw-div',
+$.jqplot('chart-kw',
     [
         DATA_DJI_PERC['series'],
         DATA_i_mfeeling_15['series'],
