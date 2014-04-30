@@ -108,7 +108,12 @@ def generate_emotion():
 		# for elem in emotiondict:
 		# 	print elem
 		for elem in emotiondict:
-			result.append([elem['timestamp'].strftime("%Y-%m-%d %H:%M:%S"), float(elem['pos'])/float(elem['pos']+elem['neg']+1)])
+			total = float(elem['pos']+elem['neg'])
+			if total != 0:
+				val = 2*(float(elem['pos'])/total + 0.138497432 - 0.5)
+				result.append([elem['timestamp'].strftime("%Y-%m-%d %H:%M:%S"), val])
+			else:
+				result.append([elem['timestamp'].strftime("%Y-%m-%d %H:%M:%S"), 0])
 
 		name = emotion_input[18:len(emotion_input)-5]
 		outfile = emotion_input[:len(emotion_input)-5]+'_parsed.json'
