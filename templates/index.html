@@ -16,6 +16,7 @@
 <script src="/libs/jqplot/plugins/jqplot.highlighter.min.js"></script>
 <script src="/libs/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
 <script src="/libs/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
+<script src="/libs/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
 
 <link rel="stylesheet" type="text/css" hrf="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/smoothness/jquery-ui.css" />
 <script src="/json/json_data.js"></script>
@@ -215,13 +216,19 @@ $('.navbar-left li').click(function(){
     
     var anchor = $(this).children().first().attr('href');
     console.log(anchor);
-    $('html, body').animate({ scrollTop: $(anchor).offset().top -50}, 700);   
+    $('html, body').animate({ scrollTop: $(anchor).offset().top -50}, 500);   
 
     $('.navbar-left li').each(function(i,dom){
         $(dom).removeClass('active')
     });
     $(this).addClass('active');
     return false;
+});
+
+$('.jqplot-table-legend tr').click(function(){
+
+    console.log($(this));
+
 });
 
 
@@ -334,7 +341,7 @@ $.jqplot('chart-input-dji',
     }
 );
 
-$.jqplot('chart-geo-div',
+var chartGeo = $.jqplot('chart-geo-div',
     [
         DATA_DJI['series'],
         DATA_LA['series'],
@@ -410,20 +417,24 @@ $.jqplot('chart-geo-div',
 
 
 
-$.jqplot('chart-kw-div',
+var chartKw = $.jqplot('chart-kw-div',
     [
-        DATA_DJI['series'],
-        DATA_LA['series'],
-        DATA_NYC['series']
+        DATA_i_mfeeling_15['series'],
+        DATA_i_m_15['series'],
+        DATA_i_am_feeling_15['series'],
+        DATA_i_dont_feel_15['series'],
+        DATA_im_15['series'],
+        DATA_makes_me_15['series'],
+        DATA_i_feel_15['series']
     ],
     {
-        title:'BY GEO DUMMY - CAN ZOOM IN',
+        title:'Result By Keywords',
         height:500,
-        seriesColors: [
-            "rgba(78, 135, 194, 0.7)", 
-            "rgb(211, 240, 9)",
-            "rgb(180, 50, 109)"
-            ],
+        // seriesColors: [
+        //     "rgba(78, 135, 194, 0.7)", 
+        //     "rgb(211, 240, 9)",
+        //     "rgb(180, 50, 109)"
+        //     ],
         seriesDefaults: {
             rendererOptions: {
                 smooth: true,
@@ -434,18 +445,34 @@ $.jqplot('chart-kw-div',
             showMarker: false
         },
         series: [
+            // {
+            //     fill: true,
+            //     label: DATA_DJI['name']
+            // },
             {
-                fill: true,
-                label: DATA_DJI['name']
+                label: DATA_i_mfeeling_15['name']
             },
             {
-                label: DATA_LA['name']
+                label: DATA_i_m_15['name']
+            },  
+            {
+                label: DATA_i_am_feeling_15['name']
             },
             {
-                label: DATA_NYC['name']
+                label: DATA_i_dont_feel_15['name']
+            },
+            {
+                label: DATA_im_15['name']
+            },
+            {
+                label: DATA_makes_me_15['name']
+            },
+            {
+                label: DATA_i_feel_15['name']
             }
-        ],
 
+
+        ],
         grid: {
             background: 'rgba(200,200,200,0.0)',
             drawBorder: false,
@@ -474,7 +501,10 @@ $.jqplot('chart-kw-div',
         },
         legend: {
             show: true,
-            placement: 'inside'
+            placement: 'inside',
+           renderer: $.jqplot.EnhancedLegendRenderer,
+           show:true,
+           showSwatches: true
         },
         cursor:{
             show: true,
