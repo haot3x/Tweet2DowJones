@@ -215,7 +215,7 @@ $('.navbar-left li').click(function(){
     
     var anchor = $(this).children().first().attr('href');
     console.log(anchor);
-    $('html, body').animate({ scrollTop: $(anchor).offset().top -50}, 700);   
+    $('html, body').animate({ scrollTop: $(anchor).offset().top -50}, 500);   
 
     $('.navbar-left li').each(function(i,dom){
         $(dom).removeClass('active')
