@@ -14,28 +14,193 @@
 <script src="/libs/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
 <script src="/libs/jqplot/plugins/jqplot.cursor.min.js"></script>
 <script src="/libs/jqplot/plugins/jqplot.highlighter.min.js"></script>
+<script src="/libs/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
+<script src="/libs/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
 
 <link rel="stylesheet" type="text/css" hrf="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/smoothness/jquery-ui.css" />
 <script src="/json/json_data.js"></script>
+
+    <style>
+        #ppl-modal img{
+            height: 260px;
+        }
+
+        #main-cont .row{
+            padding-bottom: 100px;
+        }
+
+
+    </style>
 
     </head>
     
 
 
     <body>
+ 
+
+    <!-- Static navbar -->
+    <div class="navbar navbar-inverse navbar-static-top navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Tweet 2 Dow Jones</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-left">
+            
+            <li class="active"><a href="#idea-div">Idea</a></li>
+            <li><a href="#input-stats-div">Input Stats</a></li>
+            <li><a href="#chart-geo-div">By Geo</a></li>
+            <li><a href="#chart-kw-div">By Keywords</a></li>
+            <li><a href="#conclusion-div">Conclusion</a></li>
+            
+          </ul>
+
+
+          <ul class="nav navbar-nav navbar-right">
+            
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Learn More
+              <ul class="dropdown-menu">
+                <li><a data-toggle="modal" data-target="#ppl-modal" href="#">People</a></li>
+                <li><a target='_blank' href="https://google.com">Classification Algorithm</a></li>
+                <li><a target='_blank' href="https://github.com/tedsunnyday/Tweet2DowJones">GitHub</a></li>
+              </ul>
+            </li>
+
+            
+          </ul>
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+        <div class='container-fluid' id='main-cont'>
+      
+
         
-        <div class='container-fluid'>
-        
-        <div class='row'>
-            <div class="col-md-12">
-                <div id="chartdiv"></div>
-            </div>
+        <div class='row' id="idea-div">
+        <div class="col-md-12">
+        <div class="jumbotron">
+<h1>Idea</h1>      
+<p>
+Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+</p>
+<p>
+Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
+</p>
+<p>
+Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta gravida at eget metus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+</p>
+
+        </div>
+        </div>
         </div>
         
+
+
+
+        <div class='row' id='input-stats-div'>
+        <div class="col-md-12">
+            <h2>Input Stats</h2>
+            <p>
+                We used twitter api to grab public tweets from...
+            </p>
+        </div>
+        <div class="col-md-6">
+            <div id="chart-input-kw" ></div>
+        </div>
+        
+        <div class="col-md-6">
+            <div id="chart-input-geo" ></div>
+        </div>
+        
+        <div class="col-md-12">
+            <div id="chart-input-dji" ></div>
+        </div>
+
+        </div>
+
+        <div class='row'>
+        <div class="col-md-12" height='900px'>
+                <div id="chart-geo-div" ></div>
+        </div>
+        </div>
+
+
+        <div class='row'>
+        <div class="col-md-12">
+                <div id="chart-kw-div"></div>
+        </div>
+        </div>
+
+        
+        <div class='row'>
+        <div class="col-md-12">
+                <div id="condiv"></div>
+        </div>
+        </div>
+        
+
+        <div class='row' id="conclusion-div">
+        <div class="col-md-12">
+        <div class="jumbotron">
+<h1>Conclusion</h1>      
+<p>
+Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+</p>
+<p>
+Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
+</p>
+<p>
+Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta gravida at eget metus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+</p>
+
+        </div>
+        </div>
+        </div>
+
 
         </div>
         
         
+
+<div class="modal fade " id='ppl-modal' tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      
+    <div class='container-fluid'>            
+    <div class='row'></br></div>
+    <div class='row'>
+        
+        <div class="col-md-4">
+            <img src='https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-ash3/t1.0-9/10177939_649093745138516_7624482761105962687_n.jpg'>
+
+            <h3 class="text-center">Yuan Xia</h3>
+        </div>
+
+        <div class="col-md-4">
+            <img src='https://scontent-a-hkg.xx.fbcdn.net/hphotos-ash2/t1.0-9/1001870_10201077319071565_1545304136_n.jpg'>
+
+            <h3 class="text-center">Max, Zhewu Zhou</h3>
+        </div>
+
+        <div class="col-md-4">
+            <img src='https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-frc3/t1.0-9/1794610_10203319032562757_335168770_n.jpg'>
+
+            <h3 class="text-center">Haotian Xu</h3>
+        </div>
+        
+        
+
+    </div>
+    </div>
+
+
+    </div>
+  </div>
+</div>
+    
 
     </body>
 
@@ -46,7 +211,129 @@
             console.log(DATA_LA['series'].length);
             console.log(DATA_LA['series'][0]);
 
-$.jqplot('chartdiv',
+$('.navbar-left li').click(function(){
+    
+    var anchor = $(this).children().first().attr('href');
+    console.log(anchor);
+    $('html, body').animate({ scrollTop: $(anchor).offset().top -50}, 700);   
+
+    $('.navbar-left li').each(function(i,dom){
+        $(dom).removeClass('active')
+    });
+    $(this).addClass('active');
+    return false;
+});
+
+
+var input_stats_kw = [
+    ["i feel - 43258",43258],["i am feeling - 2060", 2060], ["i'm feeling - 8754", 8754], ["i dont feel - 2777",2777],["i'm - 60098",60098],["Im - 47064",47064],["I am - 47172",47172], ["makes me - 23056",23056]
+  ];
+
+$.jqplot ('chart-input-kw', [input_stats_kw], 
+    
+    { 
+      title:'By Keywords',
+      seriesDefaults: {
+        // Make this a pie chart.
+        renderer: $.jqplot.PieRenderer, 
+        rendererOptions: {
+          // Put data labels on the pie slices.
+          // By default, labels show the percentage of the slice.
+          showDataLabels: true,
+          dataLabels: 'percent'
+        }
+      }, 
+      legend: { show:true, location: 'e' }
+    }
+  );
+
+var input_stats_geo = [
+    ["i feel - 43258",43258],["i am feeling - 2060", 2060], ["i'm feeling - 8754", 8754], ["i dont feel - 2777",2777],["i'm - 60098",60098],["Im - 47064",47064],["I am - 47172",47172], ["makes me - 23056",23056]
+  ];
+
+$.jqplot ('chart-input-geo', [input_stats_geo], 
+    
+    { 
+    title:'By GEO',
+      seriesDefaults: {
+        // Make this a pie chart.
+        renderer: $.jqplot.PieRenderer, 
+        rendererOptions: {
+          // Put data labels on the pie slices.
+          // By default, labels show the percentage of the slice.
+          showDataLabels: true,
+          dataLabels: 'percent'
+        }
+      }, 
+      legend: { show:true, location: 'e' }
+    }
+  );
+
+
+$.jqplot('chart-input-dji',
+    [
+        DATA_DJI['series']
+    ],
+    {
+        title:'Dow Jones Index',
+        height:200,
+        seriesColors: [
+            "rgb(180, 50, 109)"
+            ],
+        seriesDefaults: {
+            rendererOptions: {
+                smooth: true,
+                animation: {
+                    show: false
+                }
+            },
+            showMarker: false
+        },
+        series: [
+            {
+             
+                label: DATA_DJI['name']
+            }
+        ],
+
+        grid: {
+            background: 'rgba(200,200,200,0.0)',
+            drawBorder: false,
+            shadow: false,
+            gridLineColor: '#666666',
+            gridLineWidth: 1
+        },
+        highlighter: {
+            show: true,
+            sizeAdjust: 1,
+            tooltipOffset: 9
+        },
+
+        axes:{
+            xaxis:{ 
+                renderer:$.jqplot.DateAxisRenderer,
+                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                tickOptions: {
+                    formatString:'%Y-%m-%d %H:%M:%S',
+                    angle: -45
+                } 
+            }, 
+            yaxis:{
+                tickOptions:{ prefix:''} 
+            } 
+        },
+        legend: {
+            show: true,
+            placement: 'inside'
+        },
+        cursor:{
+            show: true,
+            zoom: true
+        } 
+    }
+);
+
+$.jqplot('chart-geo-div',
     [
         DATA_DJI['series'],
         DATA_LA['series'],
@@ -54,6 +341,7 @@ $.jqplot('chartdiv',
     ],
     {
         title:'BY GEO DUMMY - CAN ZOOM IN',
+        height:500,
         seriesColors: [
             "rgba(78, 135, 194, 0.7)", 
             "rgb(211, 240, 9)",
@@ -63,7 +351,7 @@ $.jqplot('chartdiv',
             rendererOptions: {
                 smooth: true,
                 animation: {
-                    show: true
+                    show: false
                 }
             },
             showMarker: false
@@ -74,7 +362,7 @@ $.jqplot('chartdiv',
                 label: DATA_DJI['name']
             },
             {
-                label: DATA_NYC['name']
+                label: DATA_LA['name']
             },
             {
                 label: DATA_NYC['name']
@@ -117,7 +405,83 @@ $.jqplot('chartdiv',
         } 
     }
 );
-            
+  
+
+
+
+$.jqplot('chart-kw-div',
+    [
+        DATA_DJI['series'],
+        DATA_LA['series'],
+        DATA_NYC['series']
+    ],
+    {
+        title:'BY GEO DUMMY - CAN ZOOM IN',
+        height:500,
+        seriesColors: [
+            "rgba(78, 135, 194, 0.7)", 
+            "rgb(211, 240, 9)",
+            "rgb(180, 50, 109)"
+            ],
+        seriesDefaults: {
+            rendererOptions: {
+                smooth: true,
+                animation: {
+                    show: true
+                }
+            },
+            showMarker: false
+        },
+        series: [
+            {
+                fill: true,
+                label: DATA_DJI['name']
+            },
+            {
+                label: DATA_LA['name']
+            },
+            {
+                label: DATA_NYC['name']
+            }
+        ],
+
+        grid: {
+            background: 'rgba(200,200,200,0.0)',
+            drawBorder: false,
+            shadow: false,
+            gridLineColor: '#666666',
+            gridLineWidth: 1
+        },
+        highlighter: {
+            show: true,
+            sizeAdjust: 1,
+            tooltipOffset: 9
+        },
+
+        axes:{
+            xaxis:{ 
+                renderer:$.jqplot.DateAxisRenderer,
+                tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                tickOptions: {
+                    formatString:'%Y-%m-%d %H:%M:%S',
+                    angle: -45
+                } 
+            }, 
+            yaxis:{
+                tickOptions:{ prefix:'Val - '} 
+            } 
+        },
+        legend: {
+            show: true,
+            placement: 'inside'
+        },
+        cursor:{
+            show: true,
+            zoom: true
+        } 
+    }
+);
+
         });
     </script>
 
