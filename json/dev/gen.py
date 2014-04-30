@@ -3,8 +3,8 @@
 import json
 from random import randint
 
-INPUT = "dji.json"
-OUTPUT = 'test2.json'
+INPUT = "Tweet.size1000page1cnt849.json"
+OUTPUT = 'new.json'
 
 
 objs = json.load(open(INPUT,'r'))
@@ -20,10 +20,9 @@ def date_handler(obj):
 se = []
 for o in objs:
     # se.append( {'x':o['created_at'],'y':randint(0,1000)} )
-    se.append([o['timestamp'],randint(10000,20000)])
-    # se.append([o['timestamp'],o['dji']])
+    se.append([o['created_at'],randint(0,1000)])
 
-di = {'name':'DUMMY_LA','series':se}
+di = {'name':'LA','series':se}
 # print json.dumps(di)
 # print type(di['series'][0][0])
 
