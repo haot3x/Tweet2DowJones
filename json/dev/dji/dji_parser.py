@@ -14,7 +14,8 @@ DJI_INPUT = 'dji_raw.json'
 DJI_OUTPUT = 'dji_15mins.json'
 
 EMOTION_INPUTS = {'../emotion/emotioni+dont+feel2777.json', '../emotion/emotionI+am47172.json', '../emotion/emotioni+am+feeling2060.json','../emotion/emotionIm47064.json',
-'../emotion/emotioni\'m+feeling8754.json', '../emotion/emotioni+feel43258.json', '../emotion/emotioni\'m60098.json','../emotion/emotionmakes+me23056.json', '../emotion/emotion_all234239.json'}
+'../emotion/emotioni\'m+feeling8754.json', '../emotion/emotioni+feel43258.json', '../emotion/emotioni\'m60098.json','../emotion/emotionmakes+me23056.json', '../emotion/emotion_all234239.json',
+'../emotion/cityATL5829.json', '../emotion/cityCHI5803.json', '../emotion/cityLA199512.json', '../emotion/cityNYC23095.json'}
 
 
 time_interval = convert_datetime("2014-04-07 11:00:00") - convert_datetime("2014-04-07 10:45:00")
