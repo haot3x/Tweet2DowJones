@@ -16,6 +16,7 @@
 <script src="/libs/jqplot/plugins/jqplot.highlighter.min.js"></script>
 <script src="/libs/jqplot/plugins/jqplot.pieRenderer.min.js"></script>
 <script src="/libs/jqplot/plugins/jqplot.donutRenderer.min.js"></script>
+<script src="/libs/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
 
 <link rel="stylesheet" type="text/css" hrf="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/smoothness/jquery-ui.css" />
 <script src="/json/json_data.js"></script>
@@ -224,6 +225,12 @@ $('.navbar-left li').click(function(){
     return false;
 });
 
+$('.jqplot-table-legend tr').click(function(){
+
+    console.log($(this));
+
+});
+
 
 var input_stats_kw = [
     ["i feel - 43258",43258],["i am feeling - 2060", 2060], ["i'm feeling - 8754", 8754], ["i dont feel - 2777",2777],["i'm - 60098",60098],["Im - 47064",47064],["I am - 47172",47172], ["makes me - 23056",23056]
@@ -334,7 +341,7 @@ $.jqplot('chart-input-dji',
     }
 );
 
-$.jqplot('chart-geo-div',
+var chartGeo = $.jqplot('chart-geo-div',
     [
         DATA_DJI['series'],
         DATA_LA['series'],
@@ -410,7 +417,7 @@ $.jqplot('chart-geo-div',
 
 
 
-$.jqplot('chart-kw-div',
+var chartKw = $.jqplot('chart-kw-div',
     [
         DATA_i_mfeeling_15['series'],
         DATA_i_m_15['series'],
@@ -466,7 +473,6 @@ $.jqplot('chart-kw-div',
 
 
         ],
-
         grid: {
             background: 'rgba(200,200,200,0.0)',
             drawBorder: false,
@@ -495,7 +501,10 @@ $.jqplot('chart-kw-div',
         },
         legend: {
             show: true,
-            placement: 'inside'
+            placement: 'inside',
+           renderer: $.jqplot.EnhancedLegendRenderer,
+           show:true,
+           showSwatches: true
         },
         cursor:{
             show: true,

@@ -21,6 +21,13 @@ handlers:
 - url: .*
   script: main.app
 
+skip_files:
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/json/dev/.*
+- ^(.*/)?\..*$
+
 libraries:
 - name: webapp2
   version: latest
