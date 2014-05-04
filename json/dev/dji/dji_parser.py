@@ -13,9 +13,13 @@ def date_handler(obj):
 DJI_INPUT = 'dji_raw.json'
 DJI_OUTPUT = 'dji_15mins.json'
 
+<<<<<<< HEAD
 EMOTION_INPUTS = {'../emotion/emotioni+dont+feel2777.json', '../emotion/emotionI+am47172.json', '../emotion/emotioni+am+feeling2060.json','../emotion/emotionIm47064.json',
 '../emotion/emotioni\'m+feeling8754.json', '../emotion/emotioni+feel43258.json', '../emotion/emotioni\'m60098.json','../emotion/emotionmakes+me23056.json', '../emotion/emotion_all234239.json',
 '../emotion/cityATL5829.json', '../emotion/cityCHI5803.json', '../emotion/cityLA199512.json', '../emotion/cityNYC23095.json'}
+=======
+EMOTION_INPUTS = {'../emotion/emotioni+dont+feel2777.json'}
+>>>>>>> e088e34569d65f793583cdcd3cd9ed269163d81f
 
 
 time_interval = convert_datetime("2014-04-07 11:00:00") - convert_datetime("2014-04-07 10:45:00")
@@ -38,6 +42,7 @@ def generate_dji():
 		#tmp_datetime = o['timestamp']
 		#tdelta = tmp_datetime - current_datetime
 		if (tmp_datetime - current_datetime < time_interval):
+<<<<<<< HEAD
 			count = count
 			total = total + float(o['dji'])
 		else:
@@ -45,6 +50,12 @@ def generate_dji():
 				element = {'timestamp': current_datetime, 'value': total/count}
 			else:
 				element = {'timestamp': current_datetime, 'value': 1}
+=======
+			count = count + 1
+			total = total + float(o['dji'])
+		else:
+			element = {'timestamp': current_datetime, 'value': total/count}
+>>>>>>> e088e34569d65f793583cdcd3cd9ed269163d81f
 			result_contain_weekend.append(element)
 			#result.append([current_datetime.strftime("%Y-%m-%d %H:%M:%S"), total/count])
 
@@ -109,12 +120,16 @@ def generate_emotion():
 		# for elem in emotiondict:
 		# 	print elem
 		for elem in emotiondict:
+<<<<<<< HEAD
 			total = float(elem['pos']+elem['neg'])
 			if total != 0:
 				val = 2*(float(elem['pos'])/total + 0.138497432 - 0.5)
 				result.append([elem['timestamp'].strftime("%Y-%m-%d %H:%M:%S"), val])
 			else:
 				result.append([elem['timestamp'].strftime("%Y-%m-%d %H:%M:%S"), 0])
+=======
+			result.append([elem['timestamp'].strftime("%Y-%m-%d %H:%M:%S"), float(elem['pos'])/float(elem['pos']+elem['neg']+1)])
+>>>>>>> e088e34569d65f793583cdcd3cd9ed269163d81f
 
 		name = emotion_input[18:len(emotion_input)-5]
 		outfile = emotion_input[:len(emotion_input)-5]+'_parsed.json'
