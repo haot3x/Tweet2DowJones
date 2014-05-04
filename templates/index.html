@@ -94,14 +94,15 @@
         <div class="jumbotron">
 <h2>Idea</h2>      
 <p>
-Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+With the increasing popularity of the social network, collecting public mood become possible via natural language analysis on Twitter tweets. 
 </p>
 <p>
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
+The goal of this project is to develop a system to track and analyze Dow Jones by modelling the correlation between stock market indicator and public social media mood trend.
 </p>
 <p>
-Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta gravida at eget metus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+The tweets used were collected via Twitter search APIs with several key words, and then processed with a sentiment analyser provided <a href="http://alias-i.com/lingpipe/">here</a>. Dow Jones data was collected from Yahoo Finance. 
 </p>
+
 
         </div>
         </div>
@@ -155,6 +156,15 @@ Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit no
         </div>
         </div>
 
+
+        <div class='row' id="chart-cross-correlation">
+        <div class="col-md-12">
+            <h2>Cross Correlation</h2>
+            <img src='json/cross_correlation.jpg'>
+            <div id="cross-correlation"></div>
+        </div>
+        </div>
+
         
         <div class='row'>
         <div class="col-md-12">
@@ -168,13 +178,8 @@ Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit no
         <div class="jumbotron">
 <h2>Conclusion</h2>      
 <p>
-Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
-</p>
-<p>
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
-</p>
-<p>
-Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta gravida at eget metus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+    Public mood trend can be simulated on certain degree via sentiment analysis on social media data. 
+     
 </p>
 
         </div>
