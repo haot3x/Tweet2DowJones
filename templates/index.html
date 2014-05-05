@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Tweet</title>
+        <title>Twt 2 DJI</title>
     
 <script src="/libs/jquery-1.11.0.js"></script>
 <script src="/libs/bootstrap-3.1.1/js/bootstrap.js"></script>
@@ -29,6 +29,17 @@
         #main-cont .row{
             padding-bottom: 100px;
         }
+
+        .col-md-6 img{
+            width: 350px;
+        }
+
+        #cc-modal img{
+            height: 500px;
+            text-align:center;
+        }
+
+
 
 
     </style>
@@ -73,7 +84,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Learn More
               <ul class="dropdown-menu">
                 <li><a data-toggle="modal" data-target="#ppl-modal" href="#">People</a></li>
-                <li><a target='_blank' href="https://google.com">Classification Algorithm</a></li>
+                <li><a target='_blank' href="http://alias-i.com/lingpipe/web/citations.html">Classification Algorithm</a></li>
                 <li><a target='_blank' href="https://github.com/tedsunnyday/Tweet2DowJones">GitHub</a></li>
               </ul>
             </li>
@@ -90,8 +101,8 @@
 
         
         <div class='row' id="idea-div">
-        <div class="col-md-12">
-        <div class="jumbotron">
+        <div class="col-md-12 jumbotron">
+        
 <h2>Idea</h2>      
 <p>
 With the increasing popularity of the social network, collecting public mood become possible via natural language analysis on Twitter tweets. 
@@ -100,11 +111,10 @@ With the increasing popularity of the social network, collecting public mood bec
 The goal of this project is to develop a system to track and analyze Dow Jones by modelling the correlation between stock market indicator and public social media mood trend.
 </p>
 <p>
-The tweets used were collected via Twitter search APIs with several key words, and then processed with a sentiment analyser provided <a href="http://alias-i.com/lingpipe/">here</a>. Dow Jones data was collected from Yahoo Finance. 
+The tweets used were collected via Twitter search APIs with several key words, and then processed with a sentiment analyser provided <a href="http://alias-i.com/lingpipe/" target='_blank'>here</a>. Dow Jones data was collected from Yahoo Finance. 
 </p>
 
 
-        </div>
         </div>
         </div>
         
@@ -115,7 +125,8 @@ The tweets used were collected via Twitter search APIs with several key words, a
         <div class="col-md-12">
             <h2>Input Stats</h2>
             <p>
-                We used twitter api to grab public tweets from...
+                We used twitter api to grab public tweets and Yahoo Finance to grab Dow Jones Index value. During the period of April 7th 2014 ~ April 18th 2014, the application has collected 234,239 tweets and 1,783 Dow Jones values in total.
+
             </p>
         </div>
         <div class="col-md-6">
@@ -157,38 +168,65 @@ The tweets used were collected via Twitter search APIs with several key words, a
         </div>
 
 
-        <div class='row' id="chart-cross-correlation">
-        <div class="col-md-12">
-            <h2>Cross Correlation</h2>
-            <img src='json/cross_correlation.jpg'>
-            <div id="cross-correlation"></div>
-        </div>
-        </div>
+
+
 
         
-        <div class='row'>
+        <div class='row jumbotron' id="conclusion-div">
+
+        <h2>Conclusion</h2>      
+
+
+        
         <div class="col-md-12">
-                <div id="condiv"></div>
+            <h3>Cross Correlation</h3>
+            <div class="col-md-6">
+            <img class="img-responsive" src='json/cross_correlation.jpg' data-toggle="modal" data-target="#cc-modal" title="click to enlarge">
+            </div>
+
+            <div class="col-md-6">
+            <p>
+            The cross correlation graph is shown on the left, and assume we have n1 and n2 array aligning on the x-axis
+            <br>
+
+            <i>
+            >> [acor,lags]=xcorr(n1,n2);<br>
+            >> stem(lags,acor/length(n1));<br>
+            </i>
+
+            the result shows we have some peaks, i.e. we have some correlations between tweets emotion and Dow Jones Index
+            </p>
+            </div>
+            
         </div>
+        
+        
+
+        <div class="col-md-12">
+        <h3>Summary</h3>
+        <p>
+        Public mood trend can be simulated on certain degree via sentiment analysis on social media data. 
+         
+        </p>
         </div>
         
 
-        <div class='row' id="conclusion-div">
-        <div class="col-md-12">
-        <div class="jumbotron">
-<h2>Conclusion</h2>      
-<p>
-    Public mood trend can be simulated on certain degree via sentiment analysis on social media data. 
-     
-</p>
-
-        </div>
-        </div>
-        </div>
-
-
-        </div>
         
+        </div>
+
+
+
+
+
+
+
+    </div> <!-- end of container -->
+
+
+        
+
+
+
         
 
 <div class="modal fade " id='ppl-modal' tabindex="-1" role="dialog" aria-hidden="true">
@@ -227,6 +265,29 @@ The tweets used were collected via Twitter search APIs with several key words, a
   </div>
 </div>
     
+
+
+<div class="modal fade " id='cc-modal' tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      
+    <div class='container-fluid'>            
+    <div class='row'></br></div>
+    <div class='row'>
+        
+        <div class="col-md-12">
+            <img src='json/cross_correlation.jpg'>
+
+        </div>    
+
+    </div>
+    </div>
+
+
+    </div>
+  </div>
+</div>
+
 
     </body>
 
@@ -342,7 +403,8 @@ $.jqplot('chart-input-dji',
                 tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                 tickOptions: {
                     formatString:'%Y-%m-%d %H:%M:%S',
-                    angle: -45
+                    angle: -20,
+                    fontSize: '7pt'
                 } 
             }, 
             yaxis:{
@@ -411,7 +473,8 @@ $.jqplot('chart-all',
                 tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                 tickOptions: {
                     formatString:'%Y-%m-%d %H:%M:%S',
-                    angle: -45
+                    angle: -20,
+                    fontSize: '7pt'
                 } 
             }, 
             yaxis:{
@@ -495,11 +558,12 @@ $.jqplot('chart-geo',
                 tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                 tickOptions: {
                     formatString:'%Y-%m-%d %H:%M:%S',
-                    angle: -45
+                    angle: -20,
+                    fontSize: '7pt'
                 } 
             }, 
             yaxis:{
-                tickOptions:{ prefix:'Val - '} 
+                tickOptions:{ prefix:''} 
             } 
         },
         legend: {
@@ -595,11 +659,12 @@ $.jqplot('chart-kw',
                 tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                 tickOptions: {
                     formatString:'%Y-%m-%d %H:%M:%S',
-                    angle: -45
+                    angle: -20,
+                    fontSize: '7pt'
                 } 
             }, 
             yaxis:{
-                tickOptions:{ prefix:'Val - '} 
+                tickOptions:{ prefix:''} 
             } 
         },
         legend: {
